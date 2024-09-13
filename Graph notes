@@ -1,0 +1,12 @@
+
+Acylic graph.
+
+An acyclic graph is a graph that has no cycles, or loops. 
+In graph theory and computer science, a directed acyclic graph (DAG) is a type of acyclic graph that has vertices and edges,
+with each edge pointing from one vertex to another.
+In a DAG, it's not possible to follow the edges and end up back at the starting vertex
+
+Topological Sorting for a graph is not possible if the graph is not a DAG.
+
+Topological sorting - order nodes in a linear order so that every nodes comes before the node it points to
+
