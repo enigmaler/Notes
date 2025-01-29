@@ -1,0 +1,162 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.StringJoiner;
+
+public class Home{
+     List<String> words;
+
+    public static void main(String[] args) {
+
+    Home home = new Home();
+
+
+    String[] products = {"mobile","mouse","moneypot","monitory","mousepad", "and", "balloon", "yacht"};
+    home.suggestedProducts(products, "moniter");
+
+
+    }
+
+    public void start(Trie trie, String input){
+
+        Scanner scanner = new Scanner(System.in);
+        String typedWord = "";
+        int index = 0;
+
+        for(int i = 0; i < input.length(); i++){
+
+            Trie curr = suggest(trie, input.substring(0, i), 0);
+            if(curr == null) {
+                System.out.println("🤠");
+                break;
+            }
+            dfs( curr, words, 0, new StringBuilder());
+
+            for(int j = 0; j < words.size(); j++){
+
+                System.out.print(input.substring(0, i) + words.get(j) + " ");
+
+            }
+            System.out.println();
+            words = new ArrayList<>();
+        /* while(index < ){
+
+             String s = scanner.next();
+             typedWord += s;
+             dfs(suggest(trie, typedWord, 0),words, 0, new StringBuilder());
+             System.out.println(words);
+
+             for(int i = 7; i < words.size(); i++){
+
+                 System.out.println(typedWord + words.get(i));
+
+             }
+             */
+         }
+
+    }
+    public Trie suggest(Trie trie, String word, int index){
+
+        while(index < word.length()){
+
+            trie = trie.letter[word.charAt(index) - 'a'];
+            index ++;
+        }
+        return trie;
+
+    }
+    public List<List<String>> suggestedProducts(String[] products, String searchWord){
+
+        Trie trie = new Trie();
+        words = new ArrayList<>();
+
+        for(int i = 0; i < products.length; i++){
+
+            dive(trie, products[i], 0);
+
+        }
+        List<List<String>> res = new ArrayList<>();
+
+        List<String> list = new ArrayList<>();
+
+       /* for(int i = 0; i < 26; i++){
+
+            System.out.println(trie.letter[i] + " " + i);
+
+        }*/
+
+        //System.out.println(words);
+        start(trie, searchWord);
+        return res;
+
+    }
+
+    public void dfs(Trie trie, List<String> words, int cnt, StringBuilder sb) {
+
+        for(int i = 0; i < 26; i++){
+
+            Trie curr = trie.letter[i];
+
+             if(curr != null){
+
+                 sb.append(((char) (i + 'a')));
+                // System.out.print(((char) (i + 'a')));
+
+                 if(curr.wordEnd){
+
+                     words.add(new String(sb));
+                     //System.out.print(true);
+                     return;
+                 }
+
+                 dfs(trie.letter[i], words, cnt + 1, sb);
+                 sb.deleteCharAt(sb.length() - 1);
+             }
+
+             if(cnt < sb.length()){
+                 sb.deleteCharAt(sb.length() - 1);
+             }
+
+
+        }
+
+
+
+    }
+
+    public void dive(Trie trie, String s, int index){
+
+
+
+        if( trie.letter[s.charAt(index) - 'a'] == null   ) {
+
+            trie.letter[s.charAt(index) - 'a'] = new Trie();
+
+
+        }
+        if(index == s.length() - 1){
+            trie.letter[s.charAt(index) - 'a'].wordEnd = true;
+
+            return;
+        }
+        dive(trie.letter[s.charAt(index) - 'a'], s, index + 1);
+
+
+    }
+
+    public class Trie{
+
+        Trie[] letter;
+        boolean wordEnd;
+
+        public Trie(){
+            this.wordEnd = false;
+            letter = new Trie[26];
+        }
+
+
+
+    }
+
+
+}
